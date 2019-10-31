@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: yes
+  vars:
+    elasticsearch_hosts: ["elasticsearch.ptrampert.com:443"]
+    kibana_host: "kibana.ptrampert.com"
+  roles:
+  - beats

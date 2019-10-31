@@ -1,0 +1,5 @@
+---
+beats_version: 7.x
+elasticsearch_hosts: []
+elasticsearch_protocol: "https"
+kibana_host: ""

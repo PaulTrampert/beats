@@ -1,0 +1,50 @@
+---
+- name: Install elasticsearch key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Install system prerequisites
+  apt:
+    name: apt-transport-https
+
+- name: Add repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/{{beats_version}}/apt stable main
+
+- name: Install Filebeat and Metricbeat
+  apt:
+    name: [filebeat, metricbeat]
+    update_cache: yes
+    state: latest
+  notify:
+  - Restart filebeat
+  - Restart metricbeat
+
+- name: Configure Index Lifecycle Management for filebeat
+  copy:
+    src: ilm.json
+    dest: /etc/filebeat/ilm.json
+  notify:
+  - Restart filebeat
+
+- name: Configure Index Lifecycle Management for metricbeat
+  copy:
+    src: ilm.json
+    dest: /etc/metricbeat/ilm.json
+  notify:
+  - Restart metricbeat
+
+- name: Configure Filebeat
+  template:
+    src: filebeat.yml
+    dest: /etc/filebeat/filebeat.yml
+  notify:
+  - Restart filebeat
+
+- name: Configure Metricbeat
+  template:
+    src: metricbeat.yml
+    dest: /etc/metricbeat/metricbeat.yml
+  notify:
+  - Restart metricbeat
+

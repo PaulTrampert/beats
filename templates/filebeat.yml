@@ -1,0 +1,41 @@
+filebeat.inputs:
+- type: log
+  enabled: false
+  paths:
+    - /var/log/*.log
+
+filebeat.config.inputs:
+  path: ${path.config}/inputs.d/*.yml
+  reload.enabled: true
+
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
+
+{% if beats_autodiscover is defined %}
+filebeat.autodiscover:
+  providers:
+  - type: {{beats_autodiscover}}
+    hints.enabled: true
+{% endif %}
+
+setup.template.settings:
+  index.number_of_shards: 3
+setup.kibana:
+  host: "{{kibana_host}}"
+output.elasticsearch:
+  protocol: "{{elasticsearch_protocol}}"
+{% if elasticsearch_user is defined and elasticsearch_password is defined %}
+  username: "{{elasticsearch_user}}"
+  password: "{{elasticsearch_password}}"
+{% endif %}
+  hosts:
+{% for host in elasticsearch_hosts %}
+  - "{{host}}"
+{% endfor %}
+
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch:
+
+setup.ilm.policy_file: /etc/filebeat/ilm.json
+setup.ilm.overwrite: true

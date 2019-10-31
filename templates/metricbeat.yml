@@ -7,6 +7,8 @@ metricbeat.autodiscover:
   providers:
   - type: {{beats_autodiscover}}
     hints.enabled: true
+    containers.ids:
+    - "*"
 {% endif %}
 
 setup.template.settings:

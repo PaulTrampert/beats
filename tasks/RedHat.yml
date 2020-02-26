@@ -1,0 +1,17 @@
+---
+- name: Add Elasticsearch key
+  rpm_key:
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+
+- name: Add Elasticsearch Repo
+  copy:
+    src: elastic.Repo
+    dest: /etc/yum.repos.d/elastic.repos
+
+- name: Install filebeat and metricbeat
+  yum:
+    name: [filebeat, metricbeat]
+    state: latest
+  notify:
+  - Restart filebeat
+  - Restart metricbeat

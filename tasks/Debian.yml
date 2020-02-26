@@ -1,0 +1,21 @@
+---
+- name: Install elasticsearch key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+- name: Install system prerequisites
+  apt:
+    name: apt-transport-https
+
+- name: Add repository
+  apt_repository:
+    repo: deb https://artifacts.elastic.co/packages/{{beats_version}}/apt stable main
+
+- name: Install Filebeat and Metricbeat
+  apt:
+    name: [filebeat, metricbeat]
+    update_cache: yes
+    state: latest
+  notify:
+  - Restart filebeat
+  - Restart metricbeat

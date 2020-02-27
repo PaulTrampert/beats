@@ -30,3 +30,14 @@
   notify:
   - Restart metricbeat
 
+- name: Ensure filebeat is started
+  service:
+    name: filebeat
+    enabled: yes
+    state: started
+
+- name: Ensure metricbeat is started
+  service:
+    name: metricbeat
+    enabled: yes
+    state: started
